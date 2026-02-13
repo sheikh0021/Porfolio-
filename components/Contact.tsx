@@ -37,13 +37,48 @@ export default function Contact() {
     email: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
-    alert("Thank you for your message! I'll get back to you soon.");
-    setFormData({ name: "", email: "", message: "" });
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: "" });
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus({
+          type: "success",
+          message: "Thank you for your message! I'll get back to you soon.",
+        });
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        setSubmitStatus({
+          type: "error",
+          message: data.error || "Failed to send message. Please try again.",
+        });
+      }
+    } catch (error) {
+      setSubmitStatus({
+        type: "error",
+        message: "Something went wrong. Please try again later.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -194,14 +229,43 @@ export default function Contact() {
                   placeholder="Tell me about your project..."
                 />
               </div>
+              {submitStatus.type && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`p-4 rounded-xl ${
+                    submitStatus.type === "success"
+                      ? "bg-green-500/20 border border-green-500/50 text-green-300"
+                      : "bg-red-500/20 border border-red-500/50 text-red-300"
+                  }`}
+                >
+                  {submitStatus.message}
+                </motion.div>
+              )}
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 font-semibold flex items-center justify-center gap-2 glow"
+                disabled={isSubmitting}
+                whileHover={!isSubmitting ? { scale: 1.05 } : {}}
+                whileTap={!isSubmitting ? { scale: 0.95 } : {}}
+                className={`w-full px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 font-semibold flex items-center justify-center gap-2 glow ${
+                  isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                }`}
               >
-                Send Message
-                <Send size={20} />
+                {isSubmitting ? (
+                  <>
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                    />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    Send Message
+                    <Send size={20} />
+                  </>
+                )}
               </motion.button>
             </div>
           </motion.form>
