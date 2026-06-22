@@ -32,11 +32,11 @@ const projects = [
     demo: "#",
   },
   {
-    title: "Social Media App",
+    title: "Facing Qibla Application",
     description:
-      "A social networking app with real-time messaging, posts, likes, and comments. Features Firebase integration for authentication and real-time database updates.",
-    tech: ["Kotlin", "Firebase", "MVVM", "Coroutines"],
-    image: "📱",
+      "An easy and maintainable Facing Qibla application. Simply open the app, face towards the Kaaba, and easily perform your prayers with confidence.",
+    tech: ["Kotlin", "Android SDK", "Sensors", "Material Design"],
+    image: "🧭",
     github: "#",
     demo: "#",
   },
