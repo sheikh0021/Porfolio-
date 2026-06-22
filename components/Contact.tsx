@@ -28,7 +28,7 @@ const contactInfo = [
 const socialLinks = [
   { icon: Github, href: "https://github.com/sheikh0021", label: "GitHub" },
   { icon: Linkedin, href: "https://www.linkedin.com/in/sheikhrehan2100/", label: "LinkedIn" },
-  { icon: Mail, href: "#contact", label: "Email" },
+  { icon: Mail, href: "mailto:sheikhrehan2121@gmail.com", label: "Email" },
 ];
 
 export default function Contact() {
