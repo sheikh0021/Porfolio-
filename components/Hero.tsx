@@ -122,12 +122,15 @@ export default function Hero() {
             >
               {[
                 { icon: Github, href: "https://github.com/sheikh0021", label: "GitHub" },
-                { icon: Linkedin, href: "#", label: "LinkedIn" },
+                { icon: Linkedin, href: "https://www.linkedin.com/in/sheikhrehan2100/", label: "LinkedIn" },
                 { icon: Mail, href: "#contact", label: "Email" },
               ].map((social, index) => (
                 <motion.a
                   key={social.label}
                   href={social.href}
+                  {...(social.href.startsWith("http")
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
                   whileHover={{ scale: 1.2, rotate: 5 }}
                   whileTap={{ scale: 0.9 }}
                   className="w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-white/20 transition-colors"

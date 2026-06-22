@@ -27,7 +27,7 @@ const contactInfo = [
 
 const socialLinks = [
   { icon: Github, href: "https://github.com/sheikh0021", label: "GitHub" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
+  { icon: Linkedin, href: "https://www.linkedin.com/in/sheikhrehan2100/", label: "LinkedIn" },
   { icon: Mail, href: "#contact", label: "Email" },
 ];
 
@@ -147,6 +147,9 @@ export default function Contact() {
                 <motion.a
                   key={social.label}
                   href={social.href}
+                  {...(social.href.startsWith("http")
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
                   initial={{ opacity: 0, scale: 0 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
