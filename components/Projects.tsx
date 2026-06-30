@@ -29,7 +29,7 @@ const projects = [
     tech: ["Kotlin", "Room", "WorkManager", "Material Design"],
     image: "🕌",
     github: "#",
-    demo: "#",
+    demo: "https://al-safar-backend.onrender.com/login/",
   },
   {
     title: "Facing Qibla Application",
@@ -63,7 +63,10 @@ export default function Projects() {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {projects.map((project, index) => (
+          {projects.map((project, index) => {
+            const hasLiveDemo = project.demo !== "#";
+
+            return (
             <motion.div
               key={project.title}
               initial={{ opacity: 0, y: 50 }}
@@ -71,7 +74,21 @@ export default function Projects() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.2 }}
               whileHover={{ y: -10 }}
-              className="glass rounded-3xl overflow-hidden group"
+              className={`glass rounded-3xl overflow-hidden group ${hasLiveDemo ? "cursor-pointer" : ""}`}
+              onClick={() => {
+                if (hasLiveDemo) {
+                  window.open(project.demo, "_blank", "noopener,noreferrer");
+                }
+              }}
+              onKeyDown={(e) => {
+                if (hasLiveDemo && (e.key === "Enter" || e.key === " ")) {
+                  e.preventDefault();
+                  window.open(project.demo, "_blank", "noopener,noreferrer");
+                }
+              }}
+              role={hasLiveDemo ? "link" : undefined}
+              tabIndex={hasLiveDemo ? 0 : undefined}
+              aria-label={hasLiveDemo ? `Open ${project.title} live demo` : undefined}
             >
               <div className="relative h-64 bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
                 <motion.div
@@ -86,22 +103,30 @@ export default function Projects() {
                   {project.image}
                 </motion.div>
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
+                  {project.github !== "#" && (
                   <motion.a
                     href={project.github}
+                    onClick={(e) => e.stopPropagation()}
                     whileHover={{ scale: 1.2 }}
                     whileTap={{ scale: 0.9 }}
                     className="w-12 h-12 rounded-full glass flex items-center justify-center"
                   >
                     <Github size={24} />
                   </motion.a>
+                  )}
+                  {hasLiveDemo && (
                   <motion.a
                     href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
                     whileHover={{ scale: 1.2 }}
                     whileTap={{ scale: 0.9 }}
                     className="w-12 h-12 rounded-full glass flex items-center justify-center"
                   >
                     <ExternalLink size={24} />
                   </motion.a>
+                  )}
                 </div>
               </div>
               <div className="p-6">
@@ -123,8 +148,10 @@ export default function Projects() {
                   ))}
                 </div>
                 <div className="flex gap-4">
+                  {project.github !== "#" && (
                   <motion.a
                     href={project.github}
+                    onClick={(e) => e.stopPropagation()}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="flex items-center gap-2 text-sm font-semibold text-blue-400 hover:text-blue-300"
@@ -132,19 +159,26 @@ export default function Projects() {
                     <Github size={18} />
                     Code
                   </motion.a>
+                  )}
+                  {hasLiveDemo && (
                   <motion.a
                     href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="flex items-center gap-2 text-sm font-semibold text-purple-400 hover:text-purple-300"
                   >
                     <ExternalLink size={18} />
-                    Demo
+                    Live Demo
                   </motion.a>
+                  )}
                 </div>
               </div>
             </motion.div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
